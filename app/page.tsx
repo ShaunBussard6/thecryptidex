@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { Search, MapPin, AlertTriangle, Filter } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -37,7 +36,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-black text-amber-50 font-mono relative overflow-hidden">
       <header className="text-center py-10">
         <h1 className="text-5xl font-bold tracking-wide text-red-500">THE CRYPTIDEX</h1>
-        <p className="text-lg text-white mt-2">The World's Most Comprehensive Cryptid Directory</p>
+        <p className="text-lg text-white mt-2">The World&apos;s Most Comprehensive Cryptid Directory</p>
       </header>
 
       <div className="max-w-xl mx-auto px-4 mb-10">

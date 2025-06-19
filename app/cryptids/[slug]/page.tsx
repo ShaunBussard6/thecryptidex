@@ -7,7 +7,6 @@ import { Badge } from '@/components/ui/badge'
 import {
   AlertTriangle,
   Eye,
-  MapPin,
   ShieldAlert,
   ScrollText,
   BookText,
@@ -44,7 +43,13 @@ export async function generateStaticParams() {
   return cryptids.map((c) => ({ slug: c.slug }))
 }
 
-export default async function CryptidPage({ params }: { params: { slug: string } }) {
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function CryptidPage({ params }: PageProps) {
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
   const data = await fs.readFile(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
