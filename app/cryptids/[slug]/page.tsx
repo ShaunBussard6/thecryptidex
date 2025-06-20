@@ -39,21 +39,16 @@ export async function generateStaticParams() {
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
   const data = await fs.readFile(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
-
   return cryptids.map((c) => ({ slug: c.slug }))
 }
 
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
+export default async function CryptidPage(props: any) {
+  const { slug } = props.params
 
-export default async function CryptidPage({ params }: PageProps) {
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
   const data = await fs.readFile(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
-  const cryptid = cryptids.find((c) => c.slug === params.slug)
+  const cryptid = cryptids.find((c) => c.slug === slug)
 
   if (!cryptid) return notFound()
 
