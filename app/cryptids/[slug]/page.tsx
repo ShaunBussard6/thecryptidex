@@ -35,12 +35,6 @@ interface Cryptid {
   aliases?: string[]
 }
 
-interface PageProps {
-  params: {
-    slug: string
-  }
-}
-
 export async function generateStaticParams() {
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
   const data = await fs.readFile(filePath, 'utf-8')
@@ -48,7 +42,7 @@ export async function generateStaticParams() {
   return cryptids.map((c) => ({ slug: c.slug }))
 }
 
-export default async function CryptidPage({ params }: PageProps) {
+export default async function CryptidPage({ params }: { params: { slug: string }}) {
   const { slug } = params
 
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
