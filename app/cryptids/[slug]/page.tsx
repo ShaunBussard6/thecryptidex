@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation'
+import path from 'path'
+import fs from 'fs/promises'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
-import cryptids from '@/lib/cryptids.json' assert { type: "json" }
 import {
   AlertTriangle,
   Eye,
@@ -34,8 +35,25 @@ interface Cryptid {
   aliases?: string[]
 }
 
-export default function CryptidPage({ params }: { params: { slug: string } }) {
+interface PageProps {
+  params: {
+    slug: string
+  }
+}
+
+export async function generateStaticParams() {
+  const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
+  const data = await fs.readFile(filePath, 'utf-8')
+  const cryptids: Cryptid[] = JSON.parse(data)
+  return cryptids.map((c) => ({ slug: c.slug }))
+}
+
+export default async function CryptidPage({ params }: PageProps) {
   const { slug } = params
+
+  const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
+  const data = await fs.readFile(filePath, 'utf-8')
+  const cryptids: Cryptid[] = JSON.parse(data)
   const cryptid = cryptids.find((c) => c.slug === slug)
 
   if (!cryptid) return notFound()
