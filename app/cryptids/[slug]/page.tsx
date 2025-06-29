@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import path from 'path'
-import fs from 'fs/promises'
+import fs from 'fs'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
@@ -35,9 +35,9 @@ interface Cryptid {
   aliases?: string[]
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
-  const data = await fs.readFile(filePath, 'utf-8')
+  const data = fs.readFileSync(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
   return cryptids.map((c) => ({ slug: c.slug }))
 }
@@ -46,7 +46,7 @@ export default async function CryptidPage({ params }: { params: { slug: string }
   const { slug } = params
 
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
-  const data = await fs.readFile(filePath, 'utf-8')
+  const data = await fs.promises.readFile(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
   const cryptid = cryptids.find((c) => c.slug === slug)
 
