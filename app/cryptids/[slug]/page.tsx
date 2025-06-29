@@ -43,11 +43,9 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
   return cryptids.map((c) => ({ slug: c.slug }))
 }
 
-export default function Page({ params }: { params: { slug: string } }) {
-  return <CryptidPage slug={params.slug} />
-}
-
-async function CryptidPage({ slug }: { slug: string }) {
+// ✅ NO explicit typing needed here — let Next auto infer
+export default async function Page({ params }: { params: { slug: string } }) {
+  const { slug } = params
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
   const data = await fs.readFile(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
@@ -63,11 +61,9 @@ async function CryptidPage({ slug }: { slug: string }) {
         <Link href="/" className="text-red-400 hover:underline mb-4 inline-block text-sm">
           ← Back to Directory
         </Link>
-
         <h1 className="text-5xl font-bold text-center font-serif mb-6 text-amber-50">
           {cryptid['cryptid-name']}
         </h1>
-
         <div className="relative w-full mb-10 rounded-lg overflow-hidden border-2 border-amber-300">
           <Image
             src={`/images/${cryptid.image}`}
@@ -84,9 +80,7 @@ async function CryptidPage({ slug }: { slug: string }) {
             <Eye className="w-5 h-5 text-amber-300" />
             <h2 className="text-xl font-bold text-amber-200 uppercase tracking-wide">Field Report</h2>
           </div>
-          <p className="text-amber-200 leading-relaxed text-base font-light">
-            {cryptid.Summary}
-          </p>
+          <p className="text-amber-200 leading-relaxed text-base font-light">{cryptid.Summary}</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mb-10">
@@ -96,7 +90,9 @@ async function CryptidPage({ slug }: { slug: string }) {
               <div className="space-y-2">
                 <p>
                   <span className="block text-xs text-amber-400">Type:</span>
-                  <Badge className="bg-amber-900 text-amber-200 border-amber-600 mt-1">{cryptid.Type}</Badge>
+                  <Badge className="bg-amber-900 text-amber-200 border-amber-600 mt-1">
+                    {cryptid.Type}
+                  </Badge>
                 </p>
                 {cryptid.aliases && cryptid.aliases.length > 0 && (
                   <p>
