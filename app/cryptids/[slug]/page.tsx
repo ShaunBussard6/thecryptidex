@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
-import path from 'path'
 import fs from 'fs/promises'
+import path from 'path'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
@@ -35,15 +35,14 @@ interface Cryptid {
   aliases?: string[]
 }
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
   const data = await fs.readFile(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
   return cryptids.map((c) => ({ slug: c.slug }))
 }
 
-// ✅ The correct explicit param typing for Next App Router:
-export default async function CryptidPage({
+export default async function Page({
   params,
 }: {
   params: { slug: string }
