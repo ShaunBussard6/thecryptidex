@@ -42,11 +42,11 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
   return cryptids.map((c) => ({ slug: c.slug }))
 }
 
-interface PageProps {
+export default async function Page({
+  params
+}: {
   params: { slug: string }
-}
-
-export default async function CryptidPage({ params }: PageProps) {
+}) {
   const { slug } = params
 
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
