@@ -1,3 +1,4 @@
+// app/cryptids/[slug]/page.tsx
 import { notFound } from 'next/navigation'
 import fs from 'fs/promises'
 import path from 'path'
@@ -42,13 +43,11 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
   return cryptids.map((c) => ({ slug: c.slug }))
 }
 
-interface PageProps {
-  params: { slug: string }
+export default function Page({ params }: { params: { slug: string } }) {
+  return <CryptidPage slug={params.slug} />
 }
 
-export default async function Page({ params }: PageProps) {
-  const { slug } = params
-
+async function CryptidPage({ slug }: { slug: string }) {
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
   const data = await fs.readFile(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
