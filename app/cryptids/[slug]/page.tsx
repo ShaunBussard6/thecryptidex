@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import path from 'path'
-import fs from 'fs'
+import fs from 'fs/promises'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
@@ -35,19 +35,22 @@ interface Cryptid {
   aliases?: string[]
 }
 
-// 🔥 Explicit return type with forced synchronous read
-export function generateStaticParams(): { slug: string }[] {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
-  const data = fs.readFileSync(filePath, 'utf-8')
+  const data = await fs.readFile(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
   return cryptids.map((c) => ({ slug: c.slug }))
 }
 
-export default async function CryptidPage({ params }: { params: { slug: string } }) {
+interface PageProps {
+  params: { slug: string }
+}
+
+export default async function CryptidPage({ params }: PageProps) {
   const { slug } = params
 
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
-  const data = await fs.promises.readFile(filePath, 'utf-8')
+  const data = await fs.readFile(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
   const cryptid = cryptids.find((c) => c.slug === slug)
 
