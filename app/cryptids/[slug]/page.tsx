@@ -35,14 +35,14 @@ interface Cryptid {
   aliases?: string[]
 }
 
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
+export async function generateStaticParams() {
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
   const data = await fs.readFile(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
   return cryptids.map((c) => ({ slug: c.slug }))
 }
 
-export default async function Page({
+export default async function CryptidPage({
   params
 }: {
   params: { slug: string }
