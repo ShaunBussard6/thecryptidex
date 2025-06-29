@@ -1,4 +1,3 @@
-// app/cryptids/[slug]/page.tsx
 import { notFound } from 'next/navigation'
 import fs from 'fs/promises'
 import path from 'path'
@@ -36,15 +35,18 @@ interface Cryptid {
   aliases?: string[]
 }
 
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
+interface PageProps {
+  params: { slug: string }
+}
+
+export async function generateStaticParams(): Promise<PageProps['params'][]> {
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
   const data = await fs.readFile(filePath, 'utf-8')
   const cryptids: Cryptid[] = JSON.parse(data)
   return cryptids.map((c) => ({ slug: c.slug }))
 }
 
-// ✅ NO explicit typing needed here — let Next auto infer
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: PageProps) {
   const { slug } = params
   const filePath = path.join(process.cwd(), 'lib', 'cryptids.json')
   const data = await fs.readFile(filePath, 'utf-8')
@@ -61,9 +63,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
         <Link href="/" className="text-red-400 hover:underline mb-4 inline-block text-sm">
           ← Back to Directory
         </Link>
+
         <h1 className="text-5xl font-bold text-center font-serif mb-6 text-amber-50">
           {cryptid['cryptid-name']}
         </h1>
+
         <div className="relative w-full mb-10 rounded-lg overflow-hidden border-2 border-amber-300">
           <Image
             src={`/images/${cryptid.image}`}
@@ -80,7 +84,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
             <Eye className="w-5 h-5 text-amber-300" />
             <h2 className="text-xl font-bold text-amber-200 uppercase tracking-wide">Field Report</h2>
           </div>
-          <p className="text-amber-200 leading-relaxed text-base font-light">{cryptid.Summary}</p>
+          <p className="text-amber-200 leading-relaxed text-base font-light">
+            {cryptid.Summary}
+          </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mb-10">
@@ -90,9 +96,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
               <div className="space-y-2">
                 <p>
                   <span className="block text-xs text-amber-400">Type:</span>
-                  <Badge className="bg-amber-900 text-amber-200 border-amber-600 mt-1">
-                    {cryptid.Type}
-                  </Badge>
+                  <Badge className="bg-amber-900 text-amber-200 border-amber-600 mt-1">{cryptid.Type}</Badge>
                 </p>
                 {cryptid.aliases && cryptid.aliases.length > 0 && (
                   <p>
@@ -122,28 +126,24 @@ export default async function Page({ params }: { params: { slug: string } }) {
                   <AlertTriangle className="w-4 h-4 text-red-500" />
                   <span className="text-sm text-red-300">Danger Level: {dangerLevel}</span>
                 </p>
-
                 <div className="w-full h-3 bg-amber-900/30 rounded overflow-hidden">
                   <div
                     className="h-full bg-yellow-500"
                     style={{ width: `${(dangerLevel / 10) * 100}%` }}
                   />
                 </div>
-
                 {cryptid.Debunked && cryptid.Debunked.toLowerCase() !== 'unknown' && (
                   <p className="flex items-center gap-2">
                     <ShieldAlert className="w-4 h-4 text-red-400" />
                     <span className="text-sm text-red-300">Status: {cryptid.Debunked}</span>
                   </p>
                 )}
-
                 {cryptid['First Reported Sightings'] && (
                   <p className="text-sm text-amber-300">
                     <span className="font-bold text-amber-400">First Reported:</span>{' '}
                     {cryptid['First Reported Sightings']}
                   </p>
                 )}
-
                 {cryptid['Reported Sightings (Approx.)'] !== undefined && (
                   <p className="text-sm text-amber-300">
                     <span className="font-bold text-amber-400">Sightings:</span>{' '}
@@ -162,7 +162,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
               <ChevronDown className="group-open:hidden ml-2 w-4 h-4" />
               <ChevronUp className="hidden group-open:inline ml-2 w-4 h-4" />
             </summary>
-
             <div className="grid md:grid-cols-2 gap-8 mt-6">
               {cryptid.Behavior && (
                 <div>
@@ -172,7 +171,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
                   <p className="text-sm text-amber-200 leading-relaxed">{cryptid.Behavior}</p>
                 </div>
               )}
-
               {cryptid['Folklore'] && (
                 <div>
                   <h3 className="flex items-center gap-2 text-yellow-300 text-sm font-bold uppercase mb-2">
@@ -181,7 +179,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
                   <p className="text-sm text-amber-200 leading-relaxed">{cryptid['Folklore']}</p>
                 </div>
               )}
-
               {cryptid['Media Mentions'] && (
                 <div>
                   <h3 className="flex items-center gap-2 text-yellow-300 text-sm font-bold uppercase mb-2">
@@ -190,7 +187,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
                   <p className="text-sm text-amber-200 leading-relaxed">{cryptid['Media Mentions']}</p>
                 </div>
               )}
-
               {cryptid.Hoaxes && (
                 <div>
                   <h3 className="flex items-center gap-2 text-yellow-300 text-sm font-bold uppercase mb-2">
