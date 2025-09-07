@@ -14,10 +14,18 @@ out/
 # Logs
 *.log
 
+<<<<<<< HEAD
 # IDE / platform
 .vscode/
 .vercel/
 .netlify/
 
 # Backups
+=======
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# backups / junk
+>>>>>>> 161487a (Unblock build: temp ignore lint/types; Node 20; ready for deploy)
 *_backup/
