@@ -1,7 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* App-wide defaults */
-:root { color-scheme: light dark; }
-html, body { height: 100%; }
-body { margin: 0; }
+
+/* Design tokens used in layout/body (simple, readable defaults) */
+@layer base {
+  :root {
+    --background: 222 14% 10%;
+    --foreground: 210 40% 98%;
+  }
+  .dark {
+    --background: 222 14% 6%;
+    --foreground: 210 40% 98%;
+  }
+  body { @apply bg-background text-foreground; }
+}
