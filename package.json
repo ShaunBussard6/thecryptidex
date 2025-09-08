@@ -1,0 +1,8 @@
+{
+  "name": "cryptidex-root",
+  "private": true,
+  "engines": { "node": ">=20 <21" },
+  "scripts": {
+    "vercel-build": "cd thecryptidex && npm ci && npm run build"
+  }
+}
