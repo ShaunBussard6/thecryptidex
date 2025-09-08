@@ -1,0 +1,5 @@
+{
+  "framework": "nextjs",
+  "installCommand": "cd thecryptidex && npm ci",
+  "buildCommand": "cd thecryptidex && npm run build"
+}
